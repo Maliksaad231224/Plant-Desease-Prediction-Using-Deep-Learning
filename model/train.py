@@ -5,13 +5,15 @@ from pathlib import Path
 import json
 import time
 from preprocess import load_data
+from sklearn.metrics import precision_score, recall_score, f1_score
 
-# ── Paths ──────────────────────────────────────────────
 MODEL_DIR = Path(__file__).parent.parent / "models"
 MODEL_DIR.mkdir(exist_ok=True)
+import json
+from pathlib import Path
 
-# ── Settings ───────────────────────────────────────────
-EPOCHS = 5
+BATCH_LOG_PATH = MODEL_DIR / "batch_logs.jsonl"
+EPOCHS = 1
 LEARNING_RATE = 0.001
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -64,25 +66,34 @@ def train_one_epoch(model, loader, optimizer, criterion):
 
 def validate(model, loader, criterion):
     model.eval()
-    total_loss = 0
-    correct = 0
-    total = 0
 
-    with torch.no_grad():   # no gradient calculation needed for validation
+    total_loss = 0
+    all_preds = []
+    all_labels = []
+
+    with torch.no_grad():
         for images, labels in loader:
             images, labels = images.to(DEVICE), labels.to(DEVICE)
+
             outputs = model(images)
             loss = criterion(outputs, labels)
 
             total_loss += loss.item()
+
             _, predicted = outputs.max(1)
-            correct += predicted.eq(labels).sum().item()
-            total += labels.size(0)
 
-    accuracy = 100 * correct / total
+            all_preds.extend(predicted.cpu().numpy())
+            all_labels.extend(labels.cpu().numpy())
+
+    accuracy = 100 * (sum([p == t for p, t in zip(all_preds, all_labels)]) / len(all_labels))
+
+    precision = precision_score(all_labels, all_preds, average="macro")
+    recall = recall_score(all_labels, all_preds, average="macro")
+    f1 = f1_score(all_labels, all_preds, average="macro")
+
     avg_loss = total_loss / len(loader)
-    return accuracy, avg_loss
 
+    return accuracy, avg_loss, precision, recall, f1
 
 def train():
     print(f"Using device: {DEVICE}")
@@ -100,9 +111,6 @@ def train():
     # Build model
     model = build_model(num_classes)
 
-    # Loss function and optimizer
-    # CrossEntropyLoss — standard for multi-class classification
-    # Adam optimizer — adjusts learning rate automatically, works well in practice
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.classifier.parameters(), lr=LEARNING_RATE)
 
@@ -116,7 +124,7 @@ def train():
 
         start = time.time()
         train_acc, train_loss = train_one_epoch(model, train_loader, optimizer, criterion)
-        val_acc, val_loss = validate(model, val_loader, criterion)
+        val_acc, val_loss, val_prec, val_rec, val_f1 = validate(model, val_loader, criterion)
         elapsed = time.time() - start
 
         print(f"\n  Train Acc: {train_acc:.2f}% | Train Loss: {train_loss:.4f}")
@@ -124,17 +132,25 @@ def train():
         print(f"  Time: {elapsed:.1f}s")
 
         history.append({
-            "epoch": epoch + 1,
-            "train_acc": train_acc,
-            "train_loss": train_loss,
-            "val_acc": val_acc,
-            "val_loss": val_loss
-        })
+    "epoch": epoch + 1,
+    "train_acc": train_acc,
+    "train_loss": train_loss,
+    "val_acc": val_acc,
+    "val_loss": val_loss,
+    "val_precision": val_prec,
+    "val_recall": val_rec,
+    "val_f1": val_f1
+})
+
 
         # Save best model
         if val_acc > best_val_acc:
             best_val_acc = val_acc
-            torch.save(model.state_dict(), MODEL_DIR / "best_model.pth")
+            torch.save({
+    "model_state_dict": model.state_dict(),
+    "num_classes": num_classes,
+    "classes": classes
+}, MODEL_DIR / "best_model.pth")
             print(f"  ✓ Best model saved (val_acc: {val_acc:.2f}%)")
 
     # Save training history
