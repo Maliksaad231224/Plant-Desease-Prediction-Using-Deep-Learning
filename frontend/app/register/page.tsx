@@ -22,6 +22,7 @@ export default function Register() {
         router.push('/login');
       } else {
         const data = await res.json();
+        console.log("data sent is ", data)
         setError(data.detail || 'Registration failed');
       }
     } catch {

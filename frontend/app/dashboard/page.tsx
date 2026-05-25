@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 type Prediction = {
   class_index: number;
@@ -117,7 +118,7 @@ export default function Dashboard() {
         <nav style={{ backgroundColor: '#1a3a2a', borderBottom: '2px solid #2d5a3d', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem 2rem', position: 'sticky', top: 0, zIndex: 50 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{ width: '32px', height: '32px' }}><LeafDoodle /></div>
-            <span style={{ fontSize: '1.1rem', fontWeight: 700, color: '#faf6f0' }}>PlantGuard AI</span>
+         <Link href="/">   <span style={{ fontSize: '1.1rem', fontWeight: 700, color: '#faf6f0' }}>PlantGuard AI</span> </Link>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
             {username && (

@@ -3,8 +3,22 @@ import path from 'path';
 import fs from 'fs';
 
 export async function GET() {
-  const filePath = path.join(process.cwd(), '..', 'backend', 'models', 'history.json');
-  const raw = fs.readFileSync(filePath, 'utf-8');
-  const data = JSON.parse(raw);
-  return NextResponse.json(data);
+  try{
+    const response = await fetch('http://localhost:8000/metrics',
+    { method:"GET",
+     
+    }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    return NextResponse.json(data);
+
+  } catch (error) {
+    console.error('Error fetching metrics:', error);
+    return NextResponse.json({ error: 'Failed to fetch metrics' }, { status: 500 });
+  }
+
 }

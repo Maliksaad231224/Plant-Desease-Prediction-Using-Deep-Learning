@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-
+import Link from 'next/link';
 const LeafDoodle = () => (
   <svg viewBox="0 0 200 200" style={{ width: '100%', height: '100%' }} fill="none">
     <path d="M100 180 C60 160 20 120 30 70 C40 20 90 10 120 40 C150 70 160 130 100 180Z" stroke="#2d5a3d" strokeWidth="2" fill="#b8d4c0" fillOpacity="0.3"/>
@@ -123,7 +123,7 @@ export default function Home() {
         <nav style={{ backgroundColor: '#1a3a2a', borderBottom: '2px solid #2d5a3d', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem 2rem', position: 'sticky', top: 0, zIndex: 50, width: '100%' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{ width: '32px', height: '32px' }}><LeafDoodle /></div>
-            <span style={{ fontSize: '1.25rem', fontWeight: 700, color: '#faf6f0' }}>PlantGuard AI</span>
+         <Link href="/"> <span style={{ fontSize: '1.25rem', fontWeight: 700, color: '#faf6f0' }}>PlantGuard AI</span> </Link>
           </div>
           <div style={{ display: 'flex', gap: '2rem', fontSize: '0.9rem' }}>
             {[['#features','Features'],['#how-it-works','How It Works'],['/about','About'],['/team','Team']].map(([href,label],i) => (

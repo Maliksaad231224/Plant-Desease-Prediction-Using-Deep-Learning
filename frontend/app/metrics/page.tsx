@@ -96,7 +96,7 @@ export default function Metrics() {
           {/* Hero header */}
           <div className="fade-up" style={{ marginBottom: '3rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
-              <div style={{ display: 'inline-block', padding: '4px 14px', borderRadius: '999px', backgroundColor: '#e8f0e4', color: '#2d5a3d', fontSize: '0.8rem', fontWeight: 600, marginBottom: '0.75rem' }}>
+              <div style={{ display: 'inline-block', padding: '1px 14px', borderRadius: '999px', backgroundColor: '#e8f0e4', color: '#2d5a3d', fontSize: '0.8rem', fontWeight: 600, marginBottom: '0.75rem' }}>
                  MobileNetV2 · Plant Disease Classification
               </div>
               <h1 style={{ fontSize: '2.8rem', fontWeight: 700, color: '#1a3a2a', marginBottom: '0.5rem' }}>⸙ Model Performance</h1>
@@ -119,15 +119,15 @@ export default function Metrics() {
               {/* Big stat cards row */}
               <div className="fade-up" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '1rem', marginBottom: '2.5rem' }}>
                 {[
-                  { label: 'Model Architecture', value: 'MobileNetV2', sub: 'Deep Learning', color: '#1a3a2a', bg: '#1a3a2a', text: '#faf6f0' },
+                  { label: 'Model Architecture', value: 'MobileNetV2', sub: 'Deep Learning', color: '#fff', bg: '#1a3a2a', text: '#faf6f0' },
                   { label: 'Val Accuracy', value: `${last.val_acc.toFixed(2)}%`, sub: 'Validation Set', color: '#16a34a', bg: '#f0fdf4', text: '#1a3a2a' },
                   { label: 'Train Accuracy', value: `${last.train_acc.toFixed(2)}%`, sub: 'Training Set', color: '#2d5a3d', bg: '#e8f0e4', text: '#1a3a2a' },
                   { label: 'Val Loss', value: last.val_loss.toFixed(4), sub: 'Cross Entropy', color: '#dc2626', bg: '#fef2f2', text: '#1a3a2a' },
                   { label: 'Train Loss', value: last.train_loss.toFixed(4), sub: 'Cross Entropy', color: '#d97706', bg: '#fffbeb', text: '#1a3a2a' },
                 ].map((card, i) => (
                   <div key={i} className="metric-card" style={{ backgroundColor: card.bg, borderRadius: '1.25rem', padding: '1.5rem', border: `2px solid ${card.color}30` }}>
-                    <p style={{ fontSize: '0.72rem', fontWeight: 700, color: card.color, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>{card.label}</p>
-                    <p style={{ fontSize: '1.6rem', fontWeight: 700, color: card.text === '#faf6f0' ? '#faf6f0' : card.color, marginBottom: '0.25rem' }}>{card.value}</p>
+                    <p style={{ fontSize: '0.6rem', fontWeight: 700, color: card.color, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>{card.label}</p>
+                    <p style={{ fontSize: '1.4rem', fontWeight: 700, color: card.text === '#faf6f0' ? '#faf6f0' : card.color, marginBottom: '0.25rem' }}>{card.value}</p>
                     <p style={{ fontSize: '0.75rem', color: card.text === '#faf6f0' ? '#b8d4c0' : '#7aab8a' }}>{card.sub}</p>
                   </div>
                 ))}
@@ -164,7 +164,7 @@ export default function Metrics() {
               <div style={{ backgroundColor: 'white', borderRadius: '1.5rem', border: '2px solid #b8d4c0', padding: '2rem', marginBottom: '2rem' }}>
                 <h2 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#1a3a2a', marginBottom: '0.25rem' }}>Loss Analysis</h2>
                 <p style={{ fontSize: '0.85rem', color: '#7aab8a', marginBottom: '2rem' }}>Training vs validation loss - lower is better</p>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '2rem' }}>
                   {[
                     { label: 'Training Loss', value: last.train_loss, color: '#dc2626', bg: '#fef2f2', desc: 'Loss on training data' },
                     { label: 'Validation Loss', value: last.val_loss, color: '#d97706', bg: '#fffbeb', desc: 'Loss on unseen data' },
@@ -182,17 +182,17 @@ export default function Metrics() {
               </div>
 
               {/* Model info card */}
-              <div style={{ backgroundColor: '#1a3a2a', borderRadius: '1.5rem', padding: '2rem', color: '#faf6f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1.5rem' }}>
+              <div className="model-container" style={{ backgroundColor: '#1a3a2a', borderRadius: '1.5rem', padding: '2rem', color: '#faf6f0', display: 'flex', alignItems: 'stretch', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1.5rem' }}>
                 <div>
                   <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>🐝 About This Model</h2>
                   <p style={{ color: '#b8d4c0', fontSize: '1rem', maxWidth: '900px', lineHeight: 1.6 }}>
                     MobileNetV2 architecture fine-tuned on the PlantVillage dataset. Classifies 38 plant disease categories across tomatoes, potatoes, grapes, corn, apples and more.
                   </p>
                 </div>
-                <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+                <div style={{display: 'grid',gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',gap: '1rem',flex: 1,minWidth: '280px'}}>
                   {[['38', 'Disease Classes'], ['94.14%', 'Validation Accuracy'], ['MobileNetV2', 'Architecture']].map(([val, lbl], i) => (
-                    <div key={i} style={{ textAlign: 'center', backgroundColor: '#2d5a3d', borderRadius: '1rem', padding: '2rem 2rem' }}>
-                      <p style={{ fontSize: '2rem', fontWeight: 800, color: '#7aab8a' }}>{val}</p>
+                    <div key={i} style={{ textAlign: 'center', backgroundColor: '#2d5a3d', borderRadius: '1rem', padding: '1rem 1rem' }}>
+                      <p style={{ fontSize: '1rem', fontWeight: 800, color: '#7aab8a' }}>{val}</p>
                       <p style={{ fontSize: '1rem', color: '#b8d4c0' }}>{lbl}</p>
                     </div>
                   ))}

@@ -1,5 +1,5 @@
 'use client';
-
+import Link from 'next/link';
 const LeafDoodle = () => (
   <svg viewBox="0 0 200 200" style={{ width: '100%', height: '100%' }} fill="none">
     <path d="M100 180 C60 160 20 120 30 70 C40 20 90 10 120 40 C150 70 160 130 100 180Z" stroke="#2d5a3d" strokeWidth="2" fill="#b8d4c0" fillOpacity="0.3"/>
@@ -218,15 +218,19 @@ export default function About() {
       <main style={{ backgroundColor: '#faf6f0', minHeight: '100vh' }}>
 
         {/* Navbar */}
-        <nav style={{ backgroundColor: '#1a3a2a', borderBottom: '2px solid #2d5a3d', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem 2rem', position: 'sticky', top: 0, zIndex: 50 }}>
+        <nav style={{ backgroundColor: '#1a3a2a', borderBottom: '2px solid #2d5a3d', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem 2rem', position: 'sticky', top: 0, zIndex: 50, width: '100%' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div style={{ width: '32px', height: '32px' }}><LeafDoodle /></div>
-            <span style={{ fontSize: '1.1rem', fontWeight: 700, color: '#faf6f0' }}>PlantGuard AI</span>
+         <Link href="/"> <span style={{ fontSize: '1.25rem', fontWeight: 700, color: '#faf6f0' }}>PlantGuard AI</span> </Link>
           </div>
           <div style={{ display: 'flex', gap: '2rem', fontSize: '0.9rem' }}>
-            <a href="/" style={{ color: '#b8d4c0', textDecoration: 'none' }}>Home</a>
-            <a href="/team" style={{ color: '#b8d4c0', textDecoration: 'none' }}>Team</a>
-            <a href="/metrics" style={{ color: '#b8d4c0', textDecoration: 'none' }}>Metrics</a>
+            {[['#features','Features'],['/about','About'],['/team','Team']].map(([href,label],i) => (
+              <a key={i} href={href} className="nav-link" style={{ color: '#b8d4c0', textDecoration: 'none' }}>{label}</a>
+            ))}
+          </div>
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <a href="/login" style={{ color: '#b8d4c0', border: '1px solid #4a7c5e', padding: '8px 18px', borderRadius: '999px', fontSize: '0.9rem', textDecoration: 'none' }}>Login</a>
+            <a href="/register" style={{ backgroundColor: '#7aab8a', color: '#1a3a2a', padding: '8px 18px', borderRadius: '999px', fontSize: '0.9rem', fontWeight: 700, textDecoration: 'none' }}>Get Started</a>
           </div>
         </nav>
 
@@ -260,7 +264,7 @@ export default function About() {
               <div key={i} style={{ backgroundColor: 'white', borderRadius: '1rem', padding: '1rem', textAlign: 'center', border: '2px solid #b8d4c0' }}>
                 <div style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>{icon}</div>
                 <p style={{ fontSize: '1rem', fontWeight: 700, color: '#1a3a2a', marginBottom: '0.1rem' }}>{val}</p>
-                <p style={{ fontSize: '0.75rem', color: '#7aab8a' }}>{lbl}</p>
+                <p style={{ fontSize: '0.75rem', color: '#1a3a2a' }}>{lbl}</p>
               </div>
             ))}
           </div>
