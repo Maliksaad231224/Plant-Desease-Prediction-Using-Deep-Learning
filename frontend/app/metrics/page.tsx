@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import Link from "next/link";
 
 type HistoryEntry = {
   epoch: number;
@@ -88,7 +89,7 @@ export default function Metrics() {
             <div style={{ width: '32px', height: '32px' }}><LeafDoodle /></div>
             <span style={{ fontSize: '1.1rem', fontWeight: 700, color: '#faf6f0' }}>PlantGuard AI</span>
           </div>
-          <a href="/" style={{ color: '#b8d4c0', textDecoration: 'none', fontSize: '0.9rem' }}>← Back to Home</a>
+          <Link  href="/" style={{ color: '#b8d4c0', textDecoration: 'none', fontSize: '0.9rem' }}>← Back to Home</Link>
         </nav>
 
         <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '3rem 2rem' }}>
