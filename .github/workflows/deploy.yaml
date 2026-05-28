@@ -1,47 +1,46 @@
-name: Deploy to Oracle VPS
+name: Deploy to Oracle VPS (Self-Hosted Runner)
 
 on:
   push:
     branches:
-      - master
+      - main   # or master if you use that
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    # IMPORTANT: use self-hosted runner (your VPS)
+    runs-on: self-hosted
 
     steps:
-      # 1. Checkout code
+      # 1. Checkout repository
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # 2. Setup SSH key
-      - name: Setup SSH
+      # 2. Deploy directly on VPS (no SSH needed)
+      - name: Deploy Application
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+          set -e
 
-      # 3. Deploy to VPS
-      - name: Deploy to Server
-        run: |
-          ssh ubuntu@${{ secrets.SERVER_IP }} << 'EOF'
+          echo "🚀 Starting deployment on VPS..."
 
-            set -e
+          # If repo already exists, update it; otherwise clone
+          
+          cd ~/Plant-Desease-Prediction-Using-Deep-Learning
+          git pull origin master
+          cd backend
+          docker build -t plant-backend .
 
-            echo "🚀 Pulling latest code..."
-            cd /home/ubuntu/myapp
+          echo "🧹 Restart backend container..."
+          docker stop plant-backend || true
+          docker rm plant-backend || true
+          docker run -d -p 8000:8000 --name plant-backend plant-backend
+          
+          echo "🐳 Rebuilding frontend..."
+          cd frontend
+          docker build -t plant-frontend .
 
-            git pull origin main
+          echo "🧹 Restart frontend container..."
+          docker stop plant-frontend || true
+          docker rm plant-frontend || true
+          docker run -d -p 3000:3000 --name plant-frontend plant-frontend
 
-            echo "🐳 Building Docker containers..."
-            docker compose down
-            docker compose build --no-cache
-            docker compose up -d
-
-            echo "🧹 Cleaning unused images..."
-            docker image prune -f
-
-            echo "✅ Deployment complete!"
-
-          EOF
+          echo "✅ Deployment completed successfully!"
