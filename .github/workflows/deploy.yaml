@@ -1,36 +1,47 @@
-# .github/workflows/deploy.yml
-
-name: Deploy Next.js App
+name: Deploy to Oracle VPS
 
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout repo
-      - name: Checkout code
+      # 1. Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # Setup SSH
+      # 2. Setup SSH key
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
-      # Deploy to server
-      - name: Deploy App
+      # 3. Deploy to VPS
+      - name: Deploy to Server
         run: |
           ssh ubuntu@${{ secrets.SERVER_IP }} << 'EOF'
-          mkdir hello
-          ls
-          
+
+            set -e
+
+            echo "🚀 Pulling latest code..."
+            cd /home/ubuntu/myapp
+
+            git pull origin main
+
+            echo "🐳 Building Docker containers..."
+            docker compose down
+            docker compose build --no-cache
+            docker compose up -d
+
+            echo "🧹 Cleaning unused images..."
+            docker image prune -f
+
+            echo "✅ Deployment complete!"
 
           EOF
