@@ -3,7 +3,7 @@ name: Deploy to Oracle VPS (Self-Hosted Runner)
 on:
   push:
     branches:
-      - main   # or master if you use that
+      - master # or master if you use that
 
 jobs:
   deploy:
