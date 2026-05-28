@@ -29,7 +29,7 @@ DB_NAME = os.getenv("DB_NAME")
 app = FastAPI(title="Plant Disease Prediction API")
 app.add_middleware(
     CORSMiddleware,
-        allow_origins=["*"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

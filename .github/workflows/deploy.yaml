@@ -1,0 +1,36 @@
+# .github/workflows/deploy.yml
+
+name: Deploy Next.js App
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout repo
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Setup SSH
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+      # Deploy to server
+      - name: Deploy App
+        run: |
+          ssh ubuntu@${{ secrets.SERVER_IP }} << 'EOF'
+          mkdir hello
+          ls
+          
+
+          EOF
