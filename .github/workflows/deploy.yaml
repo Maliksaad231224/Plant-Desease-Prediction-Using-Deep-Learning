@@ -25,7 +25,8 @@ jobs:
           # If repo already exists, update it; otherwise clone
           
           cd ~/Plant-Desease-Prediction-Using-Deep-Learning
-          git pull origin master
+          git fetch origin master
+          git reset --hard origin/master
           cd backend
           docker build -t plant-backend .
 
