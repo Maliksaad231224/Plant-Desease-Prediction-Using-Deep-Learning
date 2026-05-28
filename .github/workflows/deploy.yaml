@@ -3,7 +3,7 @@ name: Deploy to Oracle VPS
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
