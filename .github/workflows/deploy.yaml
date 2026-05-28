@@ -34,7 +34,7 @@ jobs:
           docker stop plant-backend || true
           docker rm plant-backend || true
           docker run -d -p 8000:8000 --name plant-backend plant-backend
-          
+          cd ..
           echo "🐳 Rebuilding frontend..."
           cd frontend
           docker build -t plant-frontend .
